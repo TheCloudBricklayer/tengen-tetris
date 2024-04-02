@@ -1,2 +1,14 @@
 __pycache__/
 database.db
+*.env
+.env.*
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.venv
+.venv.*
+data
+./data
+./data/*
+data/*

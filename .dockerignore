@@ -1,0 +1,25 @@
+# Ignore node_modules directory
+node_modules/
+
+# Ignore build artifacts
+dist/
+build/
+
+# Ignore development files
+*.log
+*.env
+
+# Ignore version control files
+.git/
+.gitignore
+
+# Ignore environment files
+.env
+.env.*
+
+# Ignore virtual environment files
+venv/
+.venv/
+
+# Ignore Python cache files
+__pycache__

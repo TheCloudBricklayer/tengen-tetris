@@ -38,3 +38,49 @@ With it, install the following dependencies:
 5. Run the server with `python3 application.py` or run it on the background with `nohup python3 application.py > out.log &`
 6. Open a web browser and connect to `localhost:8080`. If you can see a page, everything has worked fine.
 7. Find out the IP address of your box by running `ip a`, and, from another computer within the same network, connect to `<ip>:8080`.
+
+## How to run it on a virtual environment
+If you want to run this on a virtual environment, you can do so by following these steps:
+
+1. Install `virtualenv` using the following command:
+
+```bash
+python -m pip install --upgrade pip \
+    && python -m pip install virtualenv
+```
+ 
+2. Create a virtual environment using the following command:
+
+```bash
+mkdir -p .venv \
+    && python -m virtualenv .venv
+```
+3. Activate the virtual environment using the following command:
+
+```bash
+ . ./.venv/bin/activate \
+```
+4. Install the required dependencies using the following command:
+
+```bash
+pip3 install -r requirements.txt
+```
+5. Run the server using the following command:
+
+```bash
+python3 app/application.py
+```
+
+6. Deactivate the virtual environment using the following command:
+
+```bash
+deactivate
+```
+
+## How run in Docker
+If you want to run this on a Docker container, you can do so by following step:
+
+```bash
+docker build . --tag "tetris:latest"  \
+	&& docker run -d -p 8080:8080 tetris:latest
+```
