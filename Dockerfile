@@ -4,18 +4,19 @@ WORKDIR /app
 
 RUN apt-get update && apt-get upgrade -y \
     && apt-get install -y --no-install-recommends \
-    gcc libc6-dev
+    gcc libc6-dev libssl-dev
 
 COPY requirements.txt /app
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /app/wheels -r requirements.txt
-
+#RUN pip wheel --no-cache-dir --no-deps --wheel-dir /app/wheels uwsgi --build-option="--build-ext" --build-option="--openssl=/usr/local/opt/openssl/" 
+RUN UWSGI_PROFILE_OVERRIDE=ssl=true pip wheel --no-cache-dir --no-deps --wheel-dir /app/wheels uwsgi
 # assamble stage
-FROM python:3.12-slim as app
+FROM python:3.12-slim as app 
+
+WORKDIR /app
 
 RUN apt-get clean \
     && rm -rf /var/lib/apt/lists/*
-
-WORKDIR /app
 
 COPY app/. /app
 
