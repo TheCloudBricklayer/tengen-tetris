@@ -23,3 +23,9 @@ venv/
 
 # Ignore Python cache files
 __pycache__
+
+# Ignore Terrafom state files
+.terraform/
+.terraform/*
+.terraform.tfstate
+.terraform.tfstate.backup

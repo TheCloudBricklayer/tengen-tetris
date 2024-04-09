@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tetrisapp-deployment
+  labels:
+    app: tetris-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tetrisApp
+  template:
+    metadata:
+      labels:
+        app: tetrisApp
+    spec:
+      containers:
+      - name: tetris-app
+        image: thecloudbricklayer/tetris-app:latest
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8080
+      - name: nginx-app
+        image: thecloudbricklayer/nginx-app:latest
+        env:
+        - name: HOSTNAME
+          value: "tetris-app-service"
+        - name: UWSGI_HOST
+          value: "127.0.0.1"
+        - name: UWSGI_PORT
+          value: "8080"
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "128m"
+          limits:
+            memory: "128Mi"
+            cpu: "256m"
+        ports:
+        - containerPort: 80

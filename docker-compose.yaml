@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - 8081:80
+    depends_on:
+      - tetris-app
+    environment:
+      - HOSTNAME=tetris-app
+      - UWSGI_HOST=tetris-app
+      - UWSGI_PORT=8080
+  tetris-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
