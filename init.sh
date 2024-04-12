@@ -2,7 +2,7 @@
 
 REPONAME=thecloudbricklayer
 IMAGE_NAME=tetris-app
-TAG=latest
+TAG=0.0.1
 
 
 echo generatin $REPONAME/$IMAGE_NAME:$TAG image

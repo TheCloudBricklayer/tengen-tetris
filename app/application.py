@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO
+from config import Config
 
 from master import Master
 
@@ -102,5 +103,5 @@ def submit(data):
 
 # Run the app with web sockets capabilities.
 if __name__ == '__main__':
-	app.debug = True
-	socketio.run(app, host='0.0.0.0', port=8080)
+	app.debug = Config.debug
+	socketio.run(app, host=Config.app_host, port=Config.app_port)
