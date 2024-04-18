@@ -13,7 +13,13 @@ appImage:
     limits:
       cpu: 250m
       memory: 256Mi
-
+  env:
+    - name: APP_HOST
+      value: "0.0.0.0"
+    - name: APP_PORT
+      value: "8080"
+    - name: DEBUG
+      value: "false"
 nginxImage:
   name: nginx
   repository: thecloudbricklayer/nginx-app
@@ -28,12 +34,8 @@ nginxImage:
       cpu: 250m
       memory: 256Mi
   env:
-    - name: UWSGI_HOST
+    - name: APP_HOSTNAME
       value: "127.0.0.1"
-    - name: UWSGI_PORT
-      value: "8080"
-    - name: APP_HOST
-      value: "0.0.0.0"
     - name: APP_PORT
       value: "8080"
 service:

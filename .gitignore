@@ -14,3 +14,5 @@ data
 data/*
 .terraform
 .terraform/*
+!.env.example
+!.gitignore

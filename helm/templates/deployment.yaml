@@ -20,6 +20,8 @@ spec:
           imagePullPolicy: {{ .Values.appImage.pullPolicy }}
           ports:
             - containerPort: {{ .Values.appImage.containerPort }}
+          env:
+            {{- toYaml .Values.appImage.env | nindent 12}}
           resources:
             {{- toYaml .Values.appImage.resources | nindent 12 }}
         - name: {{ .Values.nginxImage.name }}
@@ -27,7 +29,7 @@ spec:
           imagePullPolicy: {{ .Values.nginxImage.pullPolicy }}
           ports:
             - containerPort: {{ .Values.nginxImage.containerPort }}
-          resources:
-            {{- toYaml .Values.nginxImage.resources | nindent 12 }}
           env:
             {{- toYaml .Values.nginxImage.env | nindent 12}}
+          resources:
+            {{- toYaml .Values.nginxImage.resources | nindent 12 }}

@@ -2,11 +2,11 @@ FROM nginx:stable-alpine
 
 WORKDIR /etc/nginx
 
-COPY nginx.conf.template /etc/nginx/nginx.conf.template
-
-COPY entrypoint.sh /entrypoint.sh
+COPY . /etc/nginx/
 
 WORKDIR /
+
+COPY entrypoint.sh /entrypoint.sh
 
 RUN chmod +x /entrypoint.sh
 

@@ -45,26 +45,27 @@ If you want to run this on a virtual environment, you can do so by following the
 1. Install `virtualenv` using the following command:
 
 ```bash
-python -m pip install --upgrade pip \
-    && python -m pip install virtualenv
+python -m pip install --upgrade pip && python -m pip install virtualenv
 ```
  
 2. Create a virtual environment using the following command:
 
 ```bash
-mkdir -p .venv \
-    && python -m virtualenv .venv
+python -m virtualenv .venv
 ```
+
 3. Activate the virtual environment using the following command:
 
 ```bash
- . ./.venv/bin/activate \
+ . ./.venv/bin/activate
 ```
+
 4. Install the required dependencies using the following command:
 
 ```bash
 pip3 install -r requirements.txt
 ```
+
 5. Run the server using the following command:
 
 ```bash
@@ -83,4 +84,83 @@ If you want to run this on a Docker container, you can do so by following step:
 ```bash
 docker build . --tag "tetris:latest"  \
 	&& docker run -d -p 8080:8080 tetris:latest
+```
+
+## How run in Docker Compose
+If you want to run this on a Docker container using Docker Compose, you can do so by following step:
+
+1. Create a `.env` file with the following content:
+
+```bash
+cp .env.example .env 
+```
+and add the values required to .env file.
+
+2. Run the following command:
+
+```bash
+docker-compose up -d --build
+```
+
+## How to run in Kubernetes
+If you want to run this on a Kubernetes cluster, you can do so by following these steps:
+
+1. build and push the Docker images to a container registry
+1.1. Add the values required in .env file
+1.2. Add execute permission to the script
+
+```bash
+chmod +x scripts/buildAndPush.sh
+```
+
+1.3. login to the container registry
+
+```bash
+docker login 
+```
+
+1.4. Run the script
+
+```bash
+./scripts/buildAndPush.sh
+```
+
+2. Create the Kubernetes resources
+
+```bash
+kubectl apply -f k8s/. --namespace <namespace>
+```
+
+2.1. Access the application
+
+```bash
+kubectl port-forward <servicename> <localport>:<targetport> --namespace <namespace>
+``` 
+
+3. Delete the Kubernetes resources
+
+```bash
+kubectl delete -f k8s/. --namespace <namespace>
+```
+
+## How to run using Helm
+If you want to run this on a Kubernetes cluster using Helm, you can do so by following these steps:
+
+1. Add the values required in `helm/values.yaml` file
+2. Run the following command:
+
+```bash
+helm install <release-name> helm/ --namespace <namespace> -f helm/values.yaml
+```
+
+3. Access the application
+
+```bash
+kubectl port-forward <servicename> <localport>:<targetport> --namespace <namespace>
+```
+
+4. Delete the Helm release
+
+```bash
+helm uninstall <release-name> --namespace <namespace>
 ```

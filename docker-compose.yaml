@@ -6,13 +6,11 @@ services:
       context: ./nginx
       dockerfile: Dockerfile
     ports:
-      - 8081:80
+      - 80:80
     depends_on:
       - tetris-app
     environment:
-      - UWSGI_HOST=${UWSGI_HOST}
-      - UWSGI_PORT=${UWSGI_PORT}
-      - APP_HOST=${APP_HOST}
+      - APP_HOSTNAME=tetris-app
       - APP_PORT=${APP_PORT}
   tetris-app:
     build:
@@ -20,3 +18,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - 8080:8080
+    environment:
+      - APP_HOST=${APP_HOST}
+      - APP_PORT=${APP_PORT}
+      - DEBUG=${DEBUG}

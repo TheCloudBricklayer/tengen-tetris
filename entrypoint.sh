@@ -1,13 +1,11 @@
 #!/bin/bash
-
+export app_host=${APP_HOST:-0.0.0.0}
+export app_port=${APP_PORT:-8080}
 echo "Starting entrypoint.sh"
 # Set environment variables
-export TZ=America/Ciudad_de_Mexico #UTC-6
 
 # Start Flask application server
-#uwsgi --http 0.0.0.0:8080 --module application:app --http-websockets --master --processes 4 --threads 2
-#uwsgi --http-socket 0.0.0.0:8080 --module application:app --plugin /plugins/gevent --gevent 1000 --http-websockets --master --processes 4 --threads 2
-uwsgi --http-socket 0.0.0.0:8080 --module application:app --http-websockets --master --processes 4 --threads 2
+#uwsgi --http 0.0.0.0:8080 --plugin /plugins/gevent --gevent 100 --module application:app --http-websockets --master --processes 4 --threads 2 --thunder-lock
+gunicorn -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker -w 1 -b ${app_host}:${app_port} application:app
 
-#python application.py
 exec "$@"
