@@ -18,5 +18,7 @@ jobs:
       run: pwd
     - name: Build the Docker image
       run: cd scripts && chmod +x buildAndPush.sh
+    - name: verify the path
+      run: ls -la
     - name: Push the Docker image  
       run: ./buildAndPush.sh
