@@ -17,6 +17,6 @@ jobs:
     - name: Set up Docker Buildx
       run: pwd
     - name: Build the Docker image
-      run: cd scripts && ls -la
+      run: cd scripts && chmod +x buildAndPush.sh
     - name: Push the Docker image  
-      run: ./buildAndRun.sh
+      run: ./buildAndPush.sh
