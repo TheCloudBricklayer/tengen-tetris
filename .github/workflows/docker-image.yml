@@ -70,17 +70,17 @@ jobs:
         uses: kitek/decode-base64-into-file-action@1.0
         with:
           encoded-value: ${{ secrets.KUBECONFIG_BASE64 }}
-          destination-file: ./config
+          destination-file: ${{ runner.workspace }}/.kube/config
         env:
-          CONFIG: ./config
+          CONFIG: ${{ runner.workspace }}/.kube/config
       -
         run: |
-          mkdir -p .kube
-          mv ${{ env.CONFIG}} .kube/config
-          chmod 600 .kube/config
+          mkdir -p ${{ runner.workspace }}/.kube
+          mv ${{ env.config }} ${{ runner.workspace }}/.kube/config
+          chmod 600 ${{ runner.workspace }}/.kube/config
         env:
           config: ${{ env.CONFIG }}
-          KUBECONFIG: ./.kube/config
+          KUBECONFIG: ${{ runner.workspace }}/.kube/config
       - 
         uses: azure/k8s-set-context@v4
         with:
