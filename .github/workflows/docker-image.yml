@@ -56,6 +56,12 @@ jobs:
     environment:
       name: whitestack
     steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v4
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
       - 
         name: Install kubectl
         uses: azure/setup-kubectl@v4
@@ -64,26 +70,28 @@ jobs:
         uses: kitek/decode-base64-into-file-action@1.0
         with:
           encoded-value: ${{ secrets.KUBECONFIG_BASE64 }}
-          destination-file: kconfig
+          destination-file: ./config
         env:
-          KCONFIG: ${{ runner.workspace }}/kconfig
+          CONFIG: ./config
       -
         run: |
-          mkdir -p ${{ runner.workspace }}/.kube
-          mv ${{ runner.workspace }}/kconfig ${{ runner.workspace }}/.kube/config
-          chmod 600 ${{ runner.workspace }}/.kube/config
+          mkdir -p .kube
+          mv ${{ env.CONFIG}} .kube/config
+          chmod 600 .kube/config
         env:
-          KUBECONFIG: ${{ runner.workspace }}/.kube/config
-    
+          CONFIG: ${{ env.CONFIG }}
+          KUBECONFIG: ./.kube/config
       - 
         uses: azure/k8s-set-context@v4
         with:
           method: kubeconfig
-          kubeconfig: ${{ runner.workspace }}/.kube/config
-          context: ${{ env.KUBE_CONTEXT }}
+          kubeconfig: ${{ env.kconf }}
+          context: ${{ env.context }}
+        env:
+          kconf: ${{ env.KUBECONFIG }}
+          context: ${{ secrets.KUBE_CONTEXT }}
       -
         name: Deploy to Kubernetes
         run: |
-          kubectl apply -f k8s/. --namespace ${{ secrets.NAMESPACE }} --validate=false
-          env:
-            KUBECONFIG: ${{ env.KUBECONFIG }}
+          kubectl apply -f k8s/. --namespace ${{ secrets.NAMESPACE }} \
+            --validate=false
