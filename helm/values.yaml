@@ -5,7 +5,7 @@ appImage:
   repository: thecloudbricklayer/tetris-app
   pullPolicy: IfNotPresent
   tag: "0.0.1"
-  containerPort: 8081
+  containerPort: 8080
   resources:
     requests:
       cpu: 100m
@@ -17,14 +17,14 @@ appImage:
     - name: APP_HOST
       value: "0.0.0.0"
     - name: APP_PORT
-      value: "8081"
+      value: "8080"
     - name: DEBUG
       value: "false"
 nginxImage:
   name: nginx
   repository: thecloudbricklayer/nginx-app
   pullPolicy: IfNotPresent
-  tag: "0.0.1"
+  tag: "0.0.2"
   containerPort: 80
   resources:
     requests:
@@ -37,7 +37,7 @@ nginxImage:
     - name: APP_HOSTNAME
       value: "127.0.0.1"
     - name: APP_PORT
-      value: "8081"
+      value: "8080"
 service:
   type: ClusterIP
   port: 80

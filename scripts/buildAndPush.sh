@@ -17,6 +17,6 @@ docker push $REPONAME/$APP_IMAGE:latest
 echo generating $REPONAME/$NGINX_IMAGE:$NGINX_IMAGE_TAG image
 
 cd nginx
-docker build -t $REPONAME/$NGINX_IMAGE:$NGINX_IMAGE_TAG -t $REPONAME/$NGINX_IMAGE:latest --no-cache ../.
+docker build -t $REPONAME/$NGINX_IMAGE:$NGINX_IMAGE_TAG -t $REPONAME/$NGINX_IMAGE:latest --no-cache ../nginx/.
 docker push $REPONAME/$NGINX_IMAGE:$NGINX_IMAGE_TAG
 docker push $REPONAME/$NGINX_IMAGE:latest
