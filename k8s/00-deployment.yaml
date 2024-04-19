@@ -17,6 +17,7 @@ spec:
       containers:
       - name: tetris-app
         image: thecloudbricklayer/tetris-app:latest
+        imagePullPolicy: Always
         env:
         - name: APP_HOST
           value: "0.0.0.0"
@@ -33,6 +34,7 @@ spec:
         - containerPort: 8080
       - name: nginx-app
         image: thecloudbricklayer/nginx-app:latest
+        imagePullPolicy: Always
         env:
         - name: APP_HOSTNAME
           value: '127.0.0.1'

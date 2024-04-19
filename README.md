@@ -101,6 +101,9 @@ and add the values required to .env file.
 ```bash
 docker-compose up -d --build .
 ```
+# Kubernetes App Architecture
+
+![Alt Text](images/WS-Challenge.png)
 
 ## How to run it in Kubernetes Cluster
 If you want to run this on a Kubernetes cluster, you can do so by following these steps:
