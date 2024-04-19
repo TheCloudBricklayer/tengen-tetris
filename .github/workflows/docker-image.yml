@@ -90,3 +90,5 @@ jobs:
         run: |
           kubectl apply -f ${{ runner.workspace }}/k8s/. --namespace ${{ secrets.NAMESPACE }} \
             --validate=false
+        env:
+          KUBECONFIG: ${{ runner.workspace }}/.kube/config
