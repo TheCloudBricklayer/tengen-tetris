@@ -1,11 +1,11 @@
 #!/bin/bash
 set -a
-source ../TENGEN-TETRIS/.env
+source ../.env
 set +a
 # Ruta de la carpeta del entorno virtual
-venv_path="../TENGEN-TETRIS/.venv"
-requirements_path="../TENGEN-TETRIS/requirements.txt"
-app_path="../TENGEN-TETRIS/app/"
+venv_path="../.venv"
+requirements_path="../requirements.txt"
+app_path="../app/"
 
 echo "Ruta completa del entorno virtual: $(realpath "$venv_path")"
 
