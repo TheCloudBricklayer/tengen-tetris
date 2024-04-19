@@ -79,7 +79,7 @@ jobs:
           mv ${{ env.CONFIG}} .kube/config
           chmod 600 .kube/config
         env:
-          CONFIG: ${{ env.CONFIG }}
+          config: ${{ env.CONFIG }}
           KUBECONFIG: ./.kube/config
       - 
         uses: azure/k8s-set-context@v4
