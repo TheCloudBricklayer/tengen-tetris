@@ -24,7 +24,7 @@ nginxImage:
   name: nginx
   repository: thecloudbricklayer/nginx-app
   pullPolicy: IfNotPresent
-  tag: "0.0.2"
+  tag: "0.0.1"
   containerPort: 80
   resources:
     requests:
