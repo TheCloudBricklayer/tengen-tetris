@@ -35,7 +35,7 @@ jobs:
           context: .
           push: true
           tags: |
-            $REGISTRY/$APP_NAME:latest,
+            ${{env.REGISTRY}}/$APP_NAME:latest,
             $REGISTRY/$APP_NAME:${{ github.sha }}
           no-cache: true
           platforms: linux/amd64,linux/arm64
