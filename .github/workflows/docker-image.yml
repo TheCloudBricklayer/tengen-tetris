@@ -10,51 +10,53 @@ env:
   NGINX_NAME: ${{ secrets.NGINX_NAME }}
 jobs:
 
-  build:
-    #runs-on: [self-hosted, linux, amd64]
-    runs-on: ubuntu-latest
-    steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v4
-      -
-        name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-      -
-        name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      -
-        name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      -
-        name: Build and push ${{ env.APP_NAME }} image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: |
-            ${{ secrets.REGISTRY }}/${{ secrets.APP_NAME }}:latest,
-            ${{ secrets.REGISTRY }}/${{ secrets.APP_NAME }}:${{ github.sha }}
-          no-cache: true
-          platforms: linux/amd64
-      -
-        name: Build and push ${{ env.NGINX_NAME }} image
-        uses: docker/build-push-action@v5
-        with:
-          context: ./nginx/
-          push: true
-          tags: |
-            ${{ secrets.REGISTRY }}/${{ secrets.NGINX_NAME }}:latest,
-            ${{ secrets.REGISTRY }}/${{ secrets.NGINX_NAME }}:${{ github.sha }}
-          no-cache: true
-          platforms: linux/amd64
+  #build:
+  #  #runs-on: [self-hosted, linux, amd64]
+  #  runs-on: ubuntu-latest
+  #  steps:
+  #    -
+  #      name: Checkout
+  #      uses: actions/checkout@v4
+  #    -
+  #      name: Set up QEMU
+  #      uses: docker/setup-qemu-action@v3
+  #    -
+  #      name: Set up Docker Buildx
+  #      uses: docker/setup-buildx-action@v3
+  #    -
+  #      name: Login to Docker Hub
+  #      uses: docker/login-action@v3
+  #      with:
+  #        username: ${{ secrets.DOCKERHUB_USERNAME }}
+  #        password: ${{ secrets.DOCKERHUB_TOKEN }}
+  #    -
+  #      name: Build and push ${{ env.APP_NAME }} image
+  #      uses: docker/build-push-action@v5
+  #      with:
+  #        context: .
+  #        push: true
+  #        tags: |
+  #          ${{ secrets.REGISTRY }}/${{ secrets.APP_NAME }}:latest,
+  #          ${{ secrets.REGISTRY }}/${{ secrets.APP_NAME }}:${{ github.sha }}
+  #        no-cache: true
+  #        platforms: linux/amd64
+  #    -
+  #      name: Build and push ${{ env.NGINX_NAME }} image
+  #      uses: docker/build-push-action@v5
+  #      with:
+  #        context: ./nginx/
+  #        push: true
+  #        tags: |
+  #          ${{ secrets.REGISTRY }}/${{ secrets.NGINX_NAME }}:latest,
+  #          ${{ secrets.REGISTRY }}/${{ secrets.NGINX_NAME }}:${{ github.sha }}
+  #        no-cache: true
+  #        platforms: linux/amd64
   Deploy:
     runs-on: ubuntu-latest
     environment:
       name: whitestack
+    env:
+      context: ${{ secrets.CONTEXT }}
     steps:
       -
         name: Checkout
@@ -70,28 +72,19 @@ jobs:
         uses: kitek/decode-base64-into-file-action@1.0
         with:
           encoded-value: ${{ secrets.KUBECONFIG_BASE64 }}
-          destination-file: ${{ runner.workspace }}/.kube/config
-        env:
-          CONFIG: ${{ runner.workspace }}/.kube/config
+          destination-file: config
       -
         run: |
           mkdir -p ${{ runner.workspace }}/.kube
-          mv ${{ env.config }} ${{ runner.workspace }}/.kube/config
+          mv config ${{ runner.workspace }}/.kube/config
           chmod 600 ${{ runner.workspace }}/.kube/config
-        env:
-          config: ${{ env.CONFIG }}
-          KUBECONFIG: ${{ runner.workspace }}/.kube/config
       - 
         uses: azure/k8s-set-context@v4
         with:
           method: kubeconfig
-          kubeconfig: ${{ env.kconf }}
-          context: ${{ env.context }}
-        env:
-          kconf: ${{ env.KUBECONFIG }}
-          context: ${{ secrets.KUBE_CONTEXT }}
+          kubeconfig: ${{ runner.workspace }}/.kube/config
       -
         name: Deploy to Kubernetes
         run: |
-          kubectl apply -f k8s/. --namespace ${{ secrets.NAMESPACE }} \
+          kubectl apply -f ${{ runner.workspace }}/k8s/. --namespace ${{ secrets.NAMESPACE }} \
             --validate=false
