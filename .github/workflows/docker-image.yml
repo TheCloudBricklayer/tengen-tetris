@@ -15,4 +15,6 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: pwd
+      run: cd scripts && chmod +x buildAndRun.sh
+    - name: Push the Docker image  
+      run: ./buildAndRun.sh
