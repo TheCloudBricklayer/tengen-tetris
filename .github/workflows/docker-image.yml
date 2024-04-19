@@ -81,6 +81,5 @@ jobs:
       -
         name: Deploy to Kubernetes
         run: |
-          cat ${{ runner.workspace }}/.kube/config
           kubectl apply -f ${{ runner.workspace }}/k8s/. --namespace ${{ secrets.NAMESPACE }} \
             --validate=false
