@@ -35,8 +35,8 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{secrets.REGISTRY}}/${{env.APP_NAME}}:latest,
-            ${{secrets.REGISTRY}}/${{env.APP_NAME}}:${{ github.sha }}
+            ${{env.REGISTRY}}/${{env.APP_NAME}}:latest,
+            ${{env.REGISTRY}}/${{env.APP_NAME}}:${{ github.sha }}
           no-cache: true
           platforms: linux/amd64,linux/arm64
       -
@@ -46,7 +46,7 @@ jobs:
           context: ./nginx/
           push: true
           tags: |
-            ${{secrets.REGISTRY}}/${{env.NGINX_NAME}}:latest,
-            ${{secrets.REGISTRY}}/${{env.NGINX_NAME}}:${{ github.sha }}
+            ${{env.REGISTRY}}/${{env.NGINX_NAME}}:latest,
+            ${{env.REGISTRY}}/${{env.NGINX_NAME}}:${{ github.sha }}
           no-cache: true
           platforms: linux/amd64,linux/arm64
