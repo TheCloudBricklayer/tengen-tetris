@@ -29,14 +29,14 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
-        name: Build and push $APP_NAME Docker image
+        name: Build and push "$APP_NAME" Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
           tags: |
-            "${{env.REGISTRY}}"/$APP_NAME:latest,
-            $REGISTRY/$APP_NAME:${{ github.sha }}
+            "$REGISTRY"/"$APP_NAME":latest,
+            "$REGISTRY"/"$APP_NAME":${{ github.sha }}
           no-cache: true
           platforms: linux/amd64,linux/arm64
       -
