@@ -9,8 +9,7 @@ on:
 jobs:
 
   build:
-
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64, gpu]
 
     steps:
       -
@@ -29,14 +28,14 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
-        name: Build and push "$APP_NAME" Docker image
+        name: Build and push ${{ env.APP_NAME }} Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
           tags: |
-            "$REGISTRY"/"$APP_NAME":latest,
-            "$REGISTRY"/"$APP_NAME":${{ github.sha }}
+            ${{ secrets.REGISTRY }}/${{ secrets.APP_NAME }}:latest,
+            ${{ secrets.REGISTRY }}/${{ secrets.APP_NAME }}:${{ github.sha }}
           no-cache: true
           platforms: linux/amd64,linux/arm64
       -
@@ -46,7 +45,7 @@ jobs:
           context: ./nginx/
           push: true
           tags: |
-            $REGISTRY/$NGINX_NAME:latest,
-            $REGISTRY/$NGINX_NAME:${{ github.sha }}
+            ${{ secrets.REGISTRY }}/${{ secrets.NGINX_NAME }}:latest,
+            ${{ secrets.REGISTRY }}/${{ secrets.NGINX_NAME }}:${{ github.sha }}
           no-cache: true
           platforms: linux/amd64,linux/arm64
