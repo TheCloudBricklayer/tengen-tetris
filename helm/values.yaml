@@ -3,7 +3,7 @@ replicaCount: 1
 appImage:
   name: tetris-app
   repository: thecloudbricklayer/tetris-app
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   tag: "0.0.1"
   containerPort: 8080
   resources:
@@ -23,7 +23,7 @@ appImage:
 nginxImage:
   name: nginx
   repository: thecloudbricklayer/nginx-app
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   tag: "0.0.1"
   containerPort: 80
   resources:
