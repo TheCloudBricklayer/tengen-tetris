@@ -5,11 +5,13 @@ on:
     branches: [ "ws_challenge" ]
   pull_request:
     branches: [ "ws_challenge" ]
-
+env:
+  APP_NAME: ${{ secrets.APP_NAME }}
+  NGINX_NAME: ${{ secrets.NGINX_NAME }}
 jobs:
 
-  build:
-    runs-on: ubuntu-latest
+  init:
+    runs-on: [self-hosted, linux, amd64]
     steps:
       -
         name: Checkout
@@ -17,6 +19,9 @@ jobs:
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v3
+  build:
+    runs-on: [self-hosted, linux, amd64]
+    steps:
       -
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -27,7 +32,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
-        name: Build and push ${{ env.APP_NAME }} Docker image
+        name: Build and push ${{ env.APP_NAME }} image
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -36,9 +41,9 @@ jobs:
             ${{ secrets.REGISTRY }}/${{ secrets.APP_NAME }}:latest,
             ${{ secrets.REGISTRY }}/${{ secrets.APP_NAME }}:${{ github.sha }}
           no-cache: true
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
       -
-        name: Build and push $NGINX_NAME Docker image
+        name: Build and push ${{ env.NGINX_NAME }} image
         uses: docker/build-push-action@v5
         with:
           context: ./nginx/
@@ -47,4 +52,40 @@ jobs:
             ${{ secrets.REGISTRY }}/${{ secrets.NGINX_NAME }}:latest,
             ${{ secrets.REGISTRY }}/${{ secrets.NGINX_NAME }}:${{ github.sha }}
           no-cache: true
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
+  Deploy:
+    runs-on: [self-hosted, linux, amd64]
+    environment:
+      name: whitestack
+    steps:
+      - 
+        name: Install kubectl
+        uses: azure/setup-kubectl@v4
+      -
+        name: Set up kubeconfig
+        uses: kitek/decode-base64-into-file-action@1.0
+        with:
+          encoded-value: ${{ secrets.KUBECONFIG_BASE64 }}
+          destination-file: kconfig
+        env:
+          KCONFIG: ${{ runner.workspace }}/kconfig
+      -
+        run: |
+          mkdir -p ${{ runner.workspace }}/.kube
+          mv ${{ runner.workspace }}/kconfig ${{ runner.workspace }}/.kube/config
+          chmod 600 ${{ runner.workspace }}/.kube/config
+        env:
+          KUBECONFIG: ${{ runner.workspace }}/.kube/config
+    
+      - 
+        uses: azure/k8s-set-context@v4
+        with:
+          method: kubeconfig
+          kubeconfig: ${{ runner.workspace }}/.kube/config
+          context: ${{ env.KUBE_CONTEXT }}
+      -
+        name: Deploy to Kubernetes
+        run: |
+          kubectl apply -f k8s/. --namespace ${{ secrets.NAMESPACE }} --validate=false
+          env:
+            KUBECONFIG: ${{ env.KUBECONFIG }}
