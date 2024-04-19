@@ -39,7 +39,7 @@ With it, install the following dependencies:
 6. Open a web browser and connect to `localhost:8080`. If you can see a page, everything has worked fine.
 7. Find out the IP address of your box by running `ip a`, and, from another computer within the same network, connect to `<ip>:8080`.
 
-## How to run it on a virtual environment
+## How to run it using virtual environment
 If you want to run this on a virtual environment, you can do so by following these steps:
 
 1. Install `virtualenv` using the following command:
@@ -63,13 +63,13 @@ python -m virtualenv .venv
 4. Install the required dependencies using the following command:
 
 ```bash
-pip3 install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 5. Run the server using the following command:
 
 ```bash
-python3 app/application.py
+python app/application.py
 ```
 
 6. Deactivate the virtual environment using the following command:
@@ -78,7 +78,7 @@ python3 app/application.py
 deactivate
 ```
 
-## How run in Docker
+## How to run it using Docker
 If you want to run this on a Docker container, you can do so by following step:
 
 ```bash
@@ -86,7 +86,7 @@ docker build . --tag "tetris:latest"  \
 	&& docker run -d -p 8080:8080 tetris:latest
 ```
 
-## How run in Docker Compose
+## How to run it using Docker Compose
 If you want to run this on a Docker container using Docker Compose, you can do so by following step:
 
 1. Create a `.env` file with the following content:
@@ -99,10 +99,10 @@ and add the values required to .env file.
 2. Run the following command:
 
 ```bash
-docker-compose up -d --build
+docker-compose up -d --build .
 ```
 
-## How to run in Kubernetes
+## How to run it in Kubernetes Cluster
 If you want to run this on a Kubernetes cluster, you can do so by following these steps:
 
 1. build and push the Docker images to a container registry
@@ -119,19 +119,19 @@ chmod +x scripts/buildAndPush.sh
 docker login 
 ```
 
-1.4. Run the script
+1.4. Run the script to build and push the Docker images
 
 ```bash
 ./scripts/buildAndPush.sh
 ```
 
-2. Create the Kubernetes resources
+2. Create the Kubernetes resources using the following command:
 
 ```bash
 kubectl apply -f k8s/. --namespace <namespace>
 ```
 
-2.1. Access the application
+2.1. Access the application using port-forwarding
 
 ```bash
 kubectl port-forward <servicename> <localport>:<targetport> --namespace <namespace>
@@ -143,7 +143,7 @@ kubectl port-forward <servicename> <localport>:<targetport> --namespace <namespa
 kubectl delete -f k8s/. --namespace <namespace>
 ```
 
-## How to run using Helm
+## How to deploy it on a Kubernetes clster using Helm
 If you want to run this on a Kubernetes cluster using Helm, you can do so by following these steps:
 
 1. Add the values required in `helm/values.yaml` file
@@ -164,3 +164,5 @@ kubectl port-forward <servicename> <localport>:<targetport> --namespace <namespa
 ```bash
 helm uninstall <release-name> --namespace <namespace>
 ```
+
+
