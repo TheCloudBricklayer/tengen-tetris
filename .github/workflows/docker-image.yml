@@ -64,9 +64,6 @@ jobs:
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v3
-      - 
-        name: Install kubectl
-        uses: azure/setup-kubectl@v4
       -
         name: Set up kubeconfig
         uses: kitek/decode-base64-into-file-action@1.0
@@ -81,6 +78,9 @@ jobs:
         env:
           KUBECONFIG: ${{ runner.workspace }}/.kube/config
       - 
+        name: Install kubectl
+        uses: azure/setup-kubectl@v4
+      -
         uses: azure/k8s-set-context@v4
         with:
           method: kubeconfig
@@ -88,7 +88,6 @@ jobs:
       -
         name: Deploy to Kubernetes
         run: |
+          cat ${{ runner.workspace }}/.kube/config
           kubectl apply -f ${{ runner.workspace }}/k8s/. --namespace ${{ secrets.NAMESPACE }} \
             --validate=false
-        env:
-          KUBECONFIG: ${{ runner.workspace }}/.kube/config
