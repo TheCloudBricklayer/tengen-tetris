@@ -70,6 +70,8 @@ jobs:
         with:
           encoded-value: ${{ secrets.KUBECONFIG_BASE64 }}
           destination-file: config
+        env:
+          KUBECONFIG: ${{ runner.workspace }}/config
       - 
         name: Install kubectl
         uses: azure/setup-kubectl@v4
@@ -77,13 +79,11 @@ jobs:
         uses: azure/k8s-set-context@v4
         with:
           method: kubeconfig
-          kubeconfig: ${{ runner.workspace }}/config
+          kubeconfig: ${{ env.kubeconfig }}
         env:
-          KUBECONFIG: ${{ runner.workspace }}/config
+          kubeconfig: ${{ env.KUBECONFIG }}
       -
         name: Deploy to Kubernetes
         run: |
           cat ${{ runner.workspace }}/config
           kubectl apply -f ${{ runner.workspace }}/k8s/. --namespace ${{ env.namespace }}
-        env:
-          kubeconfig: ${{ env.KUBECONFIG }}
