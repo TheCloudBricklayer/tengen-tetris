@@ -82,10 +82,10 @@ jobs:
           method: kubeconfig
           kubeconfig: ${{ runner.workspace }}/.config/kubeconfig
       -
-        name: verify kubectl
+        name: verify kubectl and cluster
         run: |
-          cat ${{ runner.workspace }}/.config/kubeconfig
           kubectl version --client
+          kubectl cluster-info
       -
         name: Deploy to Kubernetes
         run: |
