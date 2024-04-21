@@ -56,7 +56,7 @@ jobs:
     environment:
       name: whitestack
     env:
-      context: ${{ secrets.CONTEXT }}
+      namespace: ${{ secrets.NAMESPACE }}
     steps:
       -
         name: Checkout
@@ -79,7 +79,9 @@ jobs:
           method: kubeconfig
           kubeconfig: ${{ runner.workspace }}/config
       -
+        run: cat ${{ runner.workspace }}/config
+      -
         name: Deploy to Kubernetes
         run: |
-          kubectl apply -f ${{ runner.workspace }}/k8s/. --namespace ${{ secrets.NAMESPACE }} \
+          kubectl apply -f ${{ runner.workspace }}/k8s/. --namespace ${{ env.namespace }} \
             --validate=false
