@@ -79,11 +79,8 @@ jobs:
         uses: azure/k8s-set-context@v4
         with:
           method: kubeconfig
-          kubeconfig: ${{ env.kubeconfig }}
-        env:
-          kubeconfig: ${{ env.KUBECONFIG }}
+          kubeconfig: ${{ runner.workspace }}/config
       -
         name: Deploy to Kubernetes
         run: |
-          cat ${{ runner.workspace }}/config
           kubectl apply -f ${{ runner.workspace }}/k8s/. --namespace ${{ env.namespace }}
