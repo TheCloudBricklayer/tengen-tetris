@@ -10,47 +10,47 @@ env:
   NGINX_NAME: ${{ secrets.NGINX_NAME }}
 jobs:
 
-  #build:
-  #  #runs-on: [self-hosted, linux, amd64]
-  #  runs-on: ubuntu-latest
-  #  steps:
-  #    -
-  #      name: Checkout
-  #      uses: actions/checkout@v4
-  #    -
-  #      name: Set up QEMU
-  #      uses: docker/setup-qemu-action@v3
-  #    -
-  #      name: Set up Docker Buildx
-  #      uses: docker/setup-buildx-action@v3
-  #    -
-  #      name: Login to Docker Hub
-  #      uses: docker/login-action@v3
-  #      with:
-  #        username: ${{ secrets.DOCKERHUB_USERNAME }}
-  #        password: ${{ secrets.DOCKERHUB_TOKEN }}
-  #    -
-  #      name: Build and push ${{ env.APP_NAME }} image
-  #      uses: docker/build-push-action@v5
-  #      with:
-  #        context: .
-  #        push: true
-  #        tags: |
-  #          ${{ secrets.REGISTRY }}/${{ secrets.APP_NAME }}:latest,
-  #          ${{ secrets.REGISTRY }}/${{ secrets.APP_NAME }}:${{ github.sha }}
-  #        no-cache: true
-  #        platforms: linux/amd64
-  #    -
-  #      name: Build and push ${{ env.NGINX_NAME }} image
-  #      uses: docker/build-push-action@v5
-  #      with:
-  #        context: ./nginx/
-  #        push: true
-  #        tags: |
-  #          ${{ secrets.REGISTRY }}/${{ secrets.NGINX_NAME }}:latest,
-  #          ${{ secrets.REGISTRY }}/${{ secrets.NGINX_NAME }}:${{ github.sha }}
-  #        no-cache: true
-  #        platforms: linux/amd64
+  build:
+    #runs-on: [self-hosted, linux, amd64]
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v4
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      -
+        name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Build and push ${{ env.APP_NAME }} image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ secrets.REGISTRY }}/${{ secrets.APP_NAME }}:latest,
+            ${{ secrets.REGISTRY }}/${{ secrets.APP_NAME }}:${{ github.sha }}
+          no-cache: true
+          platforms: linux/amd64
+      -
+        name: Build and push ${{ env.NGINX_NAME }} image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./nginx/
+          push: true
+          tags: |
+            ${{ secrets.REGISTRY }}/${{ secrets.NGINX_NAME }}:latest,
+            ${{ secrets.REGISTRY }}/${{ secrets.NGINX_NAME }}:${{ github.sha }}
+          no-cache: true
+          platforms: linux/amd64
   Deploy:
     runs-on: ubuntu-latest
     environment:
