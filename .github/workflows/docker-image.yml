@@ -85,3 +85,5 @@ jobs:
         run: |
           cat ${{ runner.workspace }}/config
           kubectl apply -f ${{ runner.workspace }}/k8s/. --namespace ${{ env.namespace }}
+        env:
+          kubeconfig: ${{ env.KUBECONFIG }}
